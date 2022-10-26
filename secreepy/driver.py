@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from urllib3.exceptions import MaxRetryError, ProtocolError
 import undetected_chromedriver as uc
-from . import Web, decorators, Logger
+from secreepy import Web, decorators, Logger
 
 
 class DriverElement:

@@ -1,5 +1,4 @@
-from . import Web
-from .. import utils
+from secreepy import Web, utils
 
 
 class HtmlElement:

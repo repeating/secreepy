@@ -2,7 +2,7 @@ import traceback
 from time import sleep
 from requests_html import HTMLSession
 from urllib3.exceptions import MaxRetryError, ConnectionError
-from screepy.logger import Logger
+from secreepy.logger import Logger
 
 
 def get_request(URL, proxies=None, attempt=3):
