@@ -1,5 +1,5 @@
 from . import Web
-import utils
+from .. import utils
 
 
 class HtmlElement:

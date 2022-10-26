@@ -1,13 +1,13 @@
 from distutils.core import setup
 setup(
   name = 'SeCreepy',
-  packages = ['SeCreepy'],
-  version = '0.1.0',
+  packages = ['secreepy'],
+  version = '0.1.1',
   license='MIT',
   description = 'A wrapper for undetected chromedriver that works perfectly for long-running scrapping',
   author_email = 'fadi.younes.syr@gmail.com',
   url = 'https://github.com/repeating/secreepy',
-  download_url = 'https://github.com/repeating/secreepy/archive/v0.1.0.tar.gz',
+  download_url = 'https://github.com/repeating/secreepy/archive/v0.1.1.tar.gz',
   keywords = ['Selenium', 'undetected chromedriver', 'Web Scrapping'],
   install_requires=[            # I get to this in a second
           'selenium',
@@ -24,5 +24,8 @@ setup(
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
   ],
 )
