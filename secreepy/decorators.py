@@ -1,13 +1,9 @@
 from multiprocessing.pool import ThreadPool
 from multiprocessing.context import TimeoutError
+from secreepy.exceptions import TooLongException
 
 
-class TIMEOUT_EXCEPTION(Exception):
-    """function run timeout"""
-    pass
-
-
-def timeout(seconds, exception=TIMEOUT_EXCEPTION):
+def timeout(seconds, exception=TooLongException):
     def timeout_decorator(func):
         def _new_func(oldfunc, result, oldfunc_args, oldfunc_kwargs):
             result.append(oldfunc(*oldfunc_args, **oldfunc_kwargs))

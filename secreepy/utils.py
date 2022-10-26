@@ -3,6 +3,7 @@ from time import sleep
 from requests_html import HTMLSession
 from urllib3.exceptions import MaxRetryError, ConnectionError
 from secreepy.logger import Logger
+from secreepy.exceptions import StatusCodeException
 
 
 def get_request(URL, proxies=None, attempt=3):
@@ -26,5 +27,5 @@ def get_request(URL, proxies=None, attempt=3):
     if response.status_code in [404, 500, 502, 503]:
         return _return()
     if response.status_code != 200:
-        raise Exception(f'Requesting URL {URL} returned {response.status_code} response!')
+        raise StatusCodeException(f'Requesting URL {URL} returned {response.status_code} response!')
     return response
