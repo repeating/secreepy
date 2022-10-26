@@ -34,6 +34,9 @@ class Web:
     def refresh(self):
         pass
 
+    def invalid_page(self):
+        return self.page_source is None
+
     @property
     @abc.abstractmethod
     def title(self):
