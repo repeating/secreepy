@@ -1,4 +1,5 @@
 from secreepy import Web, utils
+from secreepy.exceptions import NoElementFoundException
 
 
 class HtmlElement:
@@ -40,7 +41,10 @@ class Html(Web):
         return self.find_element_by_xpath(f'//*[@id="{_id}"]')
 
     def find_element_by_xpath(self, xpath):
-        return HtmlElement(self.html.xpath(xpath)[0])
+        els = self.html.xpath(xpath)
+        if len(els) == 0:
+            raise NoElementFoundException
+        return HtmlElement(els[0])
 
     def find_elements_by_xpath(self, xpath):
         return [HtmlElement(el) for el in self.html.xpath(xpath)]

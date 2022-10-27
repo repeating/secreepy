@@ -4,3 +4,7 @@ class StatusCodeException(Exception):
 
 class TooLongException(Exception):
     pass
+
+
+class NoElementFoundException(Exception):
+    pass
