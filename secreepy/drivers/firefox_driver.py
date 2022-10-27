@@ -6,7 +6,7 @@ import os
 class FirefoxDriver(Driver):
     def _get_driver(self):
         self.timeout = self.timeout_backup
-        options = webdriver.ChromeOptions()
+        options = webdriver.FirefoxOptions()
         options.add_argument('--disable-browser-side-navigation')
         if self.headless:
             options.add_argument('--headless')
