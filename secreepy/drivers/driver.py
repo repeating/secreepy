@@ -55,6 +55,7 @@ class Driver(Web):
         self.timeout_backup = timeout
         self.headless = headless
         self.profile = profile
+        self.wde_counter = 0
         self.logger = Logger(verbos)
         self.driver = self.get_driver()
 
@@ -80,6 +81,7 @@ class Driver(Web):
 
     def update_driver(self):
         time.sleep(0.1)
+        self.logger.log('Updating driver', debug=True)
         self.quit()
         self.driver = self.get_driver()
 
@@ -98,23 +100,25 @@ class Driver(Web):
                 cnt = 0
                 self.logger.log('refreshing..', debug=True)
                 self.get(self.url)
-        # self.logger.log('fully loaded', self.url, debug=True)
 
     @decorators.timeout(30, exception=TimeoutException)
-    def get(self, url, tries=2):
+    def get(self, url):
         self.url = url
         try:
             self.driver.get(url)
         except TimeoutException:
             self.logger.log(f'{url} timed out', error=True, debug=True)
         except (MaxRetryError, ProtocolError):
-            # self.update_driver()
             self.logger.log(f'MaxRetry/Protocol error {url}', debug=True)
             time.sleep(1)
             self.get(url)
         except WebDriverException:
-            self.logger.log('Web driver exception. Repeating')
-            time.sleep(0.1)
+            self.logger.log('Web driver exception. Repeating', debug=True)
+            time.sleep(1)
+            self.wde_counter += 1
+            if self.wde_counter == 5:
+                self.update_driver()
+                self.wde_counter = 0
             self.get(url)
         except Exception as e:
             self.logger.log('You need to take care of this error', error=True)
