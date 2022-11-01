@@ -27,14 +27,15 @@ class Html(Web):
         super().__init__()
         self.html = None
         self.proxies = proxies
+        self._page_source = None
 
     def get(self, url):
         self.html = None
-        self.page_source = None
+        self._page_source = None
         response = utils.get_request(url, proxies=self.proxies)
         if response:
             self.html = response.html
-            self.page_source = response.text
+            self._page_source = response.text
         self.url = url
 
     def find_element_by_id(self, _id):
@@ -64,3 +65,7 @@ class Html(Web):
 
     def quit(self):
         pass
+
+    @property
+    def page_source(self):
+        return self._page_source

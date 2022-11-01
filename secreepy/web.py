@@ -4,7 +4,6 @@ import abc
 class Web:
     def __init__(self):
         self.url = None
-        self.page_source = None
 
     @abc.abstractmethod
     def get(self, url):
@@ -45,3 +44,8 @@ class Web:
     @property
     def current_url(self):
         return self.url
+
+    @property
+    @abc.abstractmethod
+    def page_source(self):
+        pass

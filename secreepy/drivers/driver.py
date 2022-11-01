@@ -121,7 +121,6 @@ class Driver(Web):
             self.logger.log(traceback.format_exc())
             raise e
         self.full_load()
-        self.page_source = self.driver.page_source
 
     @decorators.timeout(30, exception=TimeoutException)
     def delete_all_cookies(self):
@@ -216,3 +215,11 @@ class Driver(Web):
     @decorators.timeout(30, exception=TimeoutException)
     def title(self):
         return self.driver.title
+
+    @property
+    @decorators.timeout(30, exception=TimeoutException)
+    def page_source(self):
+        if self.driver:
+            return self.driver.page_source
+        else:
+            return None
