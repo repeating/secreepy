@@ -1,6 +1,7 @@
 from multiprocessing.pool import ThreadPool
 from multiprocessing.context import TimeoutError
 from secreepy.exceptions import TooLongException
+import time
 
 
 def timeout(seconds, exception=TooLongException):
@@ -19,8 +20,27 @@ def timeout(seconds, exception=TooLongException):
 
             return result[0]
 
-        _.__name__ = func.__name__
-        _.__doc__ = func.__doc__
         return _
 
     return timeout_decorator
+
+
+def repeat(exception=Exception, attempts=1, action=None, pass_self=False):
+    def repeat_decorator(func):
+        def _(*args, **kwargs):
+            for i in range(attempts):
+                try:
+                    return func(*args, **kwargs)
+                except exception as e:
+                    if i + 1 == attempts:
+                        raise e
+                    if action is not None:
+                        if pass_self:
+                            self = args[0]
+                            action(self)
+                        else:
+                            action()
+
+        return _
+
+    return repeat_decorator
