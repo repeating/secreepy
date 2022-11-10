@@ -4,12 +4,12 @@ from setuptools import find_packages
 setup(
   name='SeCreepy',
   packages=find_packages(),
-  version='0.4.3',
+  version='0.4.4',
   license='MIT',
   description='A wrapper for undetected chromedriver that works perfectly for long-running scrapping',
   author_email='fadi.younes.syr@gmail.com',
   url='https://github.com/repeating/secreepy',
-  download_url='https://github.com/repeating/secreepy/archive/v0.4.3.tar.gz',
+  download_url='https://github.com/repeating/secreepy/archive/v0.4.4.tar.gz',
   keywords=['Selenium', 'undetected chromedriver', 'Web Scrapping'],
   install_requires=[
           'selenium',

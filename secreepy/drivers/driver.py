@@ -48,13 +48,14 @@ class DriverElement:
 
 
 class Driver(Web):
-    def __init__(self, timeout=10, headless=False, verbos=0, profile=None):
+    def __init__(self, timeout=10, headless=False, verbos=0, profile=None, executable_path=None):
         super().__init__()
         self.proxy = None
         self.timeout = timeout
         self.timeout_backup = timeout
         self.headless = headless
         self.profile = profile
+        self.executable_path = executable_path
         self.wde_counter = 0
         self.logger = Logger(verbos)
         self.driver = self.get_driver()
