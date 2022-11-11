@@ -1,5 +1,5 @@
 from . import Driver
-from selenium import webdriver
+from seleniumwire import webdriver
 import os
 
 
@@ -10,14 +10,25 @@ class ChromeDriver(Driver):
         options.add_argument('--disable-browser-side-navigation')
         if self.headless:
             options.add_argument('--headless')
-        if self.profile:
+        if self.profile is not None:
             os.makedirs(self.profile, exist_ok=True)
             options.add_argument('--profile')
             options.add_argument(self.profile)
+        if self.proxy is not None:
+            options.add_argument(f'--proxy-server={self.proxy}')
+        args = {
+            'options': options,
+        }
         if self.executable_path is not None:
-            driver = webdriver.Chrome(options=options, executable_path=self.executable_path)
-        else:
-            driver = webdriver.Chrome(options=options)
+            args['executable_path'] = self.executable_path
+        if self.proxy is not None:
+            args['seleniumwire_options'] = {
+                'proxy': {
+                    'http': self.proxy,
+                    'https': self.proxy,
+                }
+            }
+        driver = webdriver.Chrome(**args)
         driver.set_page_load_timeout(self.timeout)
         driver.set_script_timeout(self.timeout)
         driver.implicitly_wait = self.timeout

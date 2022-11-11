@@ -7,7 +7,6 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from urllib3.exceptions import MaxRetryError, ProtocolError
 from secreepy import Web, decorators, Logger
 
-
 class DriverElement:
     def __init__(self, el):
         if isinstance(el, DriverElement):
@@ -48,13 +47,13 @@ class DriverElement:
 
 
 class Driver(Web):
-    def __init__(self, timeout=10, headless=False, verbos=0, profile=None, executable_path=None):
+    def __init__(self, timeout=10, headless=False, verbos=0, profile=None, proxy=None, executable_path=None):
         super().__init__()
-        self.proxy = None
         self.timeout = timeout
         self.timeout_backup = timeout
         self.headless = headless
         self.profile = profile
+        self.proxy = proxy
         self.executable_path = executable_path
         self.wde_counter = 0
         self.logger = Logger(verbos)

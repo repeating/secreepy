@@ -1,5 +1,5 @@
 from . import Driver
-import undetected_chromedriver as uc
+import seleniumwire.undetected_chromedriver as uc
 
 
 class UndetectedChromeDriver(Driver):
@@ -9,11 +9,21 @@ class UndetectedChromeDriver(Driver):
         options.add_argument('--disable-browser-side-navigation')
         if self.headless:
             options.add_argument('--headless')
+        args = {
+            'use_subprocess': True,
+            'user_data_dir': self.profile,
+            'options': options,
+        }
         if self.executable_path is not None:
-            driver = uc.Chrome(use_subprocess=True, user_data_dir=self.profile,
-                               options=options, driver_executable_path=self.executable_path)
-        else:
-            driver = uc.Chrome(use_subprocess=True, user_data_dir=self.profile, options=options)
+            args['driver_executable_path'] = self.executable_path
+        if self.proxy is not None:
+            args['seleniumwire_options'] = {
+                'proxy': {
+                    'http': self.proxy,
+                    'https': self.proxy,
+                }
+            }
+        driver = uc.Chrome(**args)
         driver.set_page_load_timeout(self.timeout)
         driver.set_script_timeout(self.timeout)
         driver.implicitly_wait = self.timeout
