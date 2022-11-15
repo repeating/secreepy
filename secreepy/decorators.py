@@ -11,7 +11,7 @@ def timeout(seconds, exception=TooLongException):
 
         def _(*args, **kwargs):
             result = []
-
+            print('seconds', seconds)
             pool = ThreadPool(1)
             try:
                 pool.apply_async(_new_func, args=(func, result, args, kwargs)).get(timeout=seconds)

@@ -5,9 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, WebDriverException
 from urllib3.exceptions import MaxRetryError, ProtocolError
+from secreepy.config import DRIVER_DECORATOR_TIMEOUT
 from secreepy import Web, decorators, Logger
-
-DRIVER_TIMEOUT = 30
 
 
 class DriverElement:
@@ -44,7 +43,7 @@ class DriverElement:
 
 
 class Driver(Web):
-    def __init__(self, timeout=DRIVER_TIMEOUT, headless=False, verbos=0, profile=None, proxy=None, executable_path=None):
+    def __init__(self, timeout=DRIVER_DECORATOR_TIMEOUT, headless=False, verbos=0, profile=None, proxy=None, executable_path=None):
         super().__init__()
         self.timeout = timeout
         self.timeout_backup = timeout
@@ -62,7 +61,7 @@ class Driver(Web):
         except:
             pass
 
-    @decorators.timeout(DRIVER_TIMEOUT, exception=TimeoutException)
+    @decorators.timeout(DRIVER_DECORATOR_TIMEOUT, exception=TimeoutException)
     def _get_driver(self):
         pass
 
@@ -82,7 +81,7 @@ class Driver(Web):
         self.quit()
         self.driver = self.get_driver()
 
-    @decorators.timeout(DRIVER_TIMEOUT, exception=TimeoutException)
+    @decorators.timeout(DRIVER_DECORATOR_TIMEOUT, exception=TimeoutException)
     def full_load(self):
         cnt = 0
         while True:
@@ -98,7 +97,7 @@ class Driver(Web):
                 self.logger.log('refreshing..', debug=True)
                 self.get(self.url)
 
-    @decorators.timeout(DRIVER_TIMEOUT, exception=TimeoutException)
+    @decorators.timeout(DRIVER_DECORATOR_TIMEOUT, exception=TimeoutException)
     def get(self, url):
         self.url = url
         try:
