@@ -7,6 +7,9 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 from urllib3.exceptions import MaxRetryError, ProtocolError
 from secreepy import Web, decorators, Logger
 
+DRIVER_TIMEOUT = 30
+
+
 class DriverElement:
     def __init__(self, el):
         if isinstance(el, DriverElement):
@@ -15,7 +18,6 @@ class DriverElement:
             self.el = el
 
     @property
-    @decorators.timeout(10, exception=TimeoutException)
     def text(self):
         ret = self.el.text
         while len(ret) and (ret[0] == '\n' or ret[0] == ' '):
@@ -24,30 +26,25 @@ class DriverElement:
             ret = ret[: -1]
         return ret
 
-    @decorators.timeout(10, exception=TimeoutException)
     def get_attribute(self, attribute):
         return self.el.get_attribute(attribute)
 
-    @decorators.timeout(10, exception=TimeoutException)
     def click(self):
         self.el.click()
 
-    @decorators.timeout(10, exception=TimeoutException)
     def clear(self):
         self.el.clear()
 
-    @decorators.timeout(10, exception=TimeoutException)
     def send_keys(self, keys):
         self.el.send_keys(keys)
 
     @property
-    @decorators.timeout(10, exception=TimeoutException)
     def location(self):
         return self.el.location
 
 
 class Driver(Web):
-    def __init__(self, timeout=10, headless=False, verbos=0, profile=None, proxy=None, executable_path=None):
+    def __init__(self, timeout=DRIVER_TIMEOUT, headless=False, verbos=0, profile=None, proxy=None, executable_path=None):
         super().__init__()
         self.timeout = timeout
         self.timeout_backup = timeout
@@ -65,7 +62,7 @@ class Driver(Web):
         except:
             pass
 
-    @decorators.timeout(30, exception=TimeoutException)
+    @decorators.timeout(DRIVER_TIMEOUT, exception=TimeoutException)
     def _get_driver(self):
         pass
 
@@ -85,7 +82,7 @@ class Driver(Web):
         self.quit()
         self.driver = self.get_driver()
 
-    @decorators.timeout(30, exception=TimeoutException)
+    @decorators.timeout(DRIVER_TIMEOUT, exception=TimeoutException)
     def full_load(self):
         cnt = 0
         while True:
@@ -101,7 +98,7 @@ class Driver(Web):
                 self.logger.log('refreshing..', debug=True)
                 self.get(self.url)
 
-    @decorators.timeout(30, exception=TimeoutException)
+    @decorators.timeout(DRIVER_TIMEOUT, exception=TimeoutException)
     def get(self, url):
         self.url = url
         try:
@@ -126,69 +123,55 @@ class Driver(Web):
             raise e
         self.full_load()
 
-    @decorators.timeout(30, exception=TimeoutException)
     def delete_all_cookies(self):
         self.logger.log('deleting cookies', debug=True)
         self.driver.delete_all_cookies()
 
-    @decorators.timeout(30, exception=TimeoutException)
     def execute_script(self, script):
         self.logger.log('executing script', script, debug=True)
         self.driver.execute_script(script)
 
-    @decorators.timeout(30, exception=TimeoutException)
     def find_element_by_id(self, _id):
         return DriverElement(WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located((By.ID, _id))))
 
-    @decorators.timeout(30, exception=TimeoutException)
     def find_element_by_xpath(self, xpath):
         return DriverElement(WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located((By.XPATH, xpath))))
 
-    @decorators.timeout(30, exception=TimeoutException)
     def find_elements_by_xpath(self, xpath):
         return [DriverElement(el) for el in self.driver.find_elements(By.XPATH, xpath)]
 
-    @decorators.timeout(30, exception=TimeoutException)
     def find_elements_by_id(self, _id):
         return [DriverElement(el) for el in self.driver.find_elements(By.ID, _id)]
 
-    @decorators.timeout(30, exception=TimeoutException)
     def find_element_by_name(self, name):
         return DriverElement(WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located((By.NAME, name))))
 
-    @decorators.timeout(30, exception=TimeoutException)
     def click_by_xpath(self, xpath):
         self.find_element_by_xpath(xpath).click()
 
-    @decorators.timeout(30, exception=TimeoutException)
     def click_by_id(self, _id):
         self.find_element_by_id(_id).click()
 
-    @decorators.timeout(30, exception=TimeoutException)
     def send_keys_by_id(self, _id, keys):
         element = self.find_element_by_id(_id)
         element.clear()
         element.send_keys(keys)
 
-    @decorators.timeout(30, exception=TimeoutException)
     def send_keys_by_name(self, name, keys):
         element = self.find_element_by_name(name)
         element.clear()
         element.send_keys(keys)
 
-    @decorators.timeout(30, exception=TimeoutException)
     def scroll_to_element(self, element):
         x = element.location['x']
         y = element.location['y']
         self.driver.execute_script(f'window.scrollTo({x},{y});')
 
-    @decorators.timeout(30, exception=TimeoutException)
     def scroll_to_bottom(self, steps=1):
         for i in range(1, 1 + steps):
             self.driver.execute_script(f"window.scrollTo(0, parseInt({i} * document.body.scrollHeight / {steps}));")
             time.sleep(0.05)
 
-    @decorators.timeout(30, exception=TimeoutException)
     def scroll_down(self, pixels):
         self.driver.execute_script(f'window.scrollBy(0,{pixels})')
 
@@ -198,11 +181,9 @@ class Driver(Web):
         except:
             pass
 
-    @decorators.timeout(30, exception=TimeoutException)
     def refresh(self):
         self.driver.refresh()
 
-    @decorators.timeout(30, exception=TimeoutException)
     def alert(self):
         self.execute_script("alert('Test')")
         while True:
@@ -216,12 +197,10 @@ class Driver(Web):
         return self.driver.current_url
 
     @property
-    @decorators.timeout(30, exception=TimeoutException)
     def title(self):
         return self.driver.title
 
     @property
-    @decorators.timeout(30, exception=TimeoutException)
     def page_source(self):
         if self.driver:
             return self.driver.page_source
