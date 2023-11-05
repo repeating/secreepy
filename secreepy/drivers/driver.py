@@ -66,14 +66,15 @@ class Driver(Web):
         pass
 
     def get_driver(self):
-        while True:
+        for i in range(3):
             try:
                 return self._get_driver()
-            except:
+            except Exception as e:
+                self.logger.log(f'Creating a web driver failed. Trying to create a new driver.. {i+1}/3')
                 time.sleep(0.1)
-                self.logger.log('Getting a driver failed. Trying to get a new driver..')
-                self.logger.log(traceback.format_exc(), debug=True)
                 self.quit()
+                if i == 2:
+                    raise e
 
     def update_driver(self):
         time.sleep(0.1)

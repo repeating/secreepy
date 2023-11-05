@@ -24,7 +24,7 @@ def timeout(seconds, exception=TooLongException):
     return timeout_decorator
 
 
-def repeat(exception=Exception, attempts=1, action=None, pass_self=False):
+def repeat(attempts=1, exception=Exception, action=None, pass_self=False):
     def repeat_decorator(func):
         def _(*args, **kwargs):
             for i in range(attempts):
